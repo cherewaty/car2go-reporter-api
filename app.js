@@ -8,7 +8,7 @@ var app = express();
 
 app.set('port', (process.env.PORT || 3000));
 
-var whitelist = process.env.CORS_WHITELIST;
+var whitelist = (process.env.CORS_WHITELIST || []);
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -26,6 +26,10 @@ app.listen(app.get('port'), function () {
 app.use('/proxy/car2go', cors(corsOptions), proxy('www.car2go.com', {
   https: true,
   proxyReqPathResolver: function(req) {
-    return require('url').parse(req.url).path + '&oauth_consumer_key=' + process.env.CAR2GO_OAUTH_CONSUMER_KEY;
+    if(process.env.CAR2GO_OAUTH_CONSUMER_KEY) {
+      return require('url').parse(req.url).path + '&oauth_consumer_key=' + process.env.CAR2GO_OAUTH_CONSUMER_KEY;
+    } else {
+      return require('url').parse(req.url).path;
+    }
   }
 }));
