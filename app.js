@@ -2,14 +2,26 @@ require('dotenv').config();
 
 var express = require('express');
 var proxy = require('express-http-proxy');
+var cors = require('cors');
 
 var app = express();
+
+var whitelist = process.env.CORS_WHITELIST;
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
 
 app.listen(3000, function () {
   console.log('car2go Reporter API listening on port 3000');
 });
 
-app.use('/proxy/car2go', proxy('www.car2go.com', {
+app.use('/proxy/car2go', cors(corsOptions), proxy('www.car2go.com', {
   https: true,
   proxyReqPathResolver: function(req) {
     return require('url').parse(req.url).path + '&oauth_consumer_key=' + process.env.CAR2GO_OAUTH_CONSUMER_KEY;
