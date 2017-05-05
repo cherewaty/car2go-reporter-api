@@ -8,7 +8,8 @@ var app = express();
 
 app.set('port', (process.env.PORT || 3000));
 
-var whitelist = (process.env.CORS_WHITELIST || []);
+// CORS_WHITELIST should be comma-separated list
+var whitelist = (process.env.CORS_WHITELIST.split(',') || []);
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
