@@ -1,0 +1,14 @@
+{
+  "name": "car2go-reporter-api",
+  "version": "0.0.0",
+  "description": "API for car2go reporter web app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
